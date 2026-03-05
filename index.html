@@ -111,20 +111,238 @@ nav {
   from { transform: translateY(0) rotate(0deg); }
   to { transform: translateY(-28px) rotate(12deg); }
 }
-.hero-waifu {
-  width: 260px; height: auto; border-radius: 16px;
-  border: 2px solid rgba(255,110,180,.35);
-  box-shadow: 0 0 40px rgba(255,20,147,.35), 0 0 80px rgba(192,132,252,.2);
-  animation: fadeUp .7s ease both, floatWaifu 4s ease-in-out infinite alternate;
-  margin-bottom: 32px; position: relative; z-index: 2;
+
+/* ─── SOLAR SYSTEM PLANETS ────────────────────────────────────────────────── */
+
+/* Shared planet infrastructure */
+.planet-jupiter, .planet-venus, .planet-neptune {
+  position: absolute; border-radius: 50%; overflow: hidden;
 }
-@keyframes floatWaifu {
-  from { transform: translateY(0); }
-  to { transform: translateY(-12px); }
+.planet-surface {
+  position: absolute; inset: 0; border-radius: 50%;
+  animation: surfacedrift 12s ease-in-out infinite alternate;
+}
+.planet-saturn-wrap {
+  position: absolute; width: 220px; height: 150px;
+  animation: floatorb var(--t) ease-in-out infinite alternate;
+}
+.planet-saturn {
+  position: absolute; width: 150px; height: 150px;
+  border-radius: 50%; overflow: hidden;
+  top: 0; left: 50%; transform: translateX(-50%);
+}
+
+/* ─── KEYFRAMES ───────────────────────────────────────────────────────────── */
+
+@keyframes trancepulse {
+  from { transform: scale(1);    filter: hue-rotate(0deg)  brightness(1); }
+  to   { transform: scale(1.04); filter: hue-rotate(30deg) brightness(1.08); }
+}
+@keyframes surfacedrift {
+  from { background-position: 0px 0px; }
+  to   { background-position: 20px 20px; }
+}
+@keyframes ringtilt {
+  from { transform: translate(-50%, -50%) rotateX(72deg) rotateZ(0deg); }
+  to   { transform: translate(-50%, -50%) rotateX(72deg) rotateZ(3deg); }
+}
+@keyframes venusSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ─── JUPITER ─────────────────────────────────────────────────────────────── */
+
+.planet-jupiter {
+  background:
+    radial-gradient(ellipse at 35% 30%, rgba(255,240,200,.55) 0%, transparent 55%),
+    repeating-linear-gradient(180deg,
+      #c8773a 0px, #c8773a 8px, #e8c99a 8px, #e8c99a 16px,
+      #a0522d 16px, #a0522d 22px, #d4956e 22px, #d4956e 30px,
+      #e8dcc8 30px, #e8dcc8 36px, #9b4e2e 36px, #9b4e2e 44px,
+      #c8773a 44px, #c8773a 52px, #b89060 52px, #b89060 60px
+    ),
+    linear-gradient(100deg, #7a3520, #c8773a 50%, #7c3aed 100%);
+  box-shadow:
+    0 0 20px rgba(200,119,58,.80), 0 0 45px rgba(200,119,58,.55),
+    0 0 80px rgba(200,80,20,.35),
+    4px 4px 25px rgba(255,20,147,.45), -4px -4px 25px rgba(0,200,180,.25),
+    0 0 120px rgba(124,58,237,.15);
+  animation:
+    floatorb var(--t) ease-in-out infinite alternate,
+    trancepulse 7s ease-in-out infinite alternate;
+  animation-delay: 0s, 0s;
+  opacity: .92;
+}
+.planet-jupiter::before {
+  content: ''; position: absolute;
+  width: 32px; height: 20px; border-radius: 50%;
+  background: radial-gradient(ellipse at 40% 40%, #ff6b35, #d4380d 40%, #8b1a00 80%, transparent 100%);
+  top: 58%; left: 52%; transform: translate(-50%, -50%);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.5), 0 0 8px rgba(255,80,20,.6);
+  z-index: 2;
+}
+.planet-jupiter .planet-surface {
+  background: repeating-linear-gradient(180deg,
+    rgba(255,180,80,.12) 0px, rgba(255,180,80,.08) 8px,
+    rgba(100,30,10,.15) 8px, rgba(100,30,10,.08) 16px
+  );
+  background-size: 100% 60px;
+  mix-blend-mode: soft-light;
+}
+
+/* ─── VENUS ───────────────────────────────────────────────────────────────── */
+
+.planet-venus {
+  background: radial-gradient(ellipse at 35% 30%,
+    rgba(255,245,200,.9) 0%, rgba(255,200,120,.8) 30%,
+    rgba(220,140,60,.9) 60%, rgba(180,80,40,1) 100%
+  );
+  box-shadow:
+    0 0 18px rgba(255,180,80,.85), 0 0 40px rgba(255,140,60,.60),
+    0 0 70px rgba(220,100,40,.35),
+    4px 4px 18px rgba(255,105,180,.50), -4px -4px 18px rgba(255,200,100,.40),
+    0 0 90px rgba(255,150,50,.12);
+  animation:
+    floatorb var(--t) ease-in-out infinite alternate,
+    trancepulse 7s ease-in-out infinite alternate;
+  animation-delay: 0s, -2.3s;
+  opacity: .88;
+}
+.planet-venus::before {
+  content: ''; position: absolute;
+  width: 140%; height: 140%; top: -20%; left: -20%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,
+    rgba(255,255,200,0) 0deg, rgba(255,220,150,.25) 60deg,
+    rgba(255,255,200,0) 120deg, rgba(220,160,80,.20) 180deg,
+    rgba(255,255,200,0) 240deg, rgba(255,210,130,.15) 300deg,
+    rgba(255,255,200,0) 360deg
+  );
+  animation: venusSpin 14s linear infinite;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.planet-venus .planet-surface {
+  background: radial-gradient(ellipse at 60% 65%, rgba(180,80,20,.3) 0%, transparent 60%);
+  animation: surfacedrift 14s ease-in-out infinite alternate;
+  mix-blend-mode: multiply;
+}
+
+/* ─── SATURN ──────────────────────────────────────────────────────────────── */
+
+.planet-saturn {
+  background:
+    radial-gradient(ellipse at 50% 8%,  rgba(255,245,200,.70) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 92%, rgba(255,240,190,.50) 0%, transparent 40%),
+    radial-gradient(ellipse at 32% 28%, rgba(255,250,220,.85) 0%, transparent 52%),
+    repeating-linear-gradient(180deg,
+      #d4a830 0px, #d4a830 6px, #e8c96a 6px, #e8c96a 12px,
+      #c8922a 12px, #c8922a 18px, #e0b850 18px, #e0b850 24px,
+      #b8802a 24px, #b8802a 30px, #d4a830 30px, #d4a830 36px
+    ),
+    linear-gradient(160deg, #8b5e1a, #c8922a 50%, #7a4a10);
+  box-shadow:
+    0 0 25px rgba(212,168,48,.90), 0 0 55px rgba(212,168,48,.65),
+    0 0 100px rgba(200,130,40,.40),
+    5px 5px 30px rgba(0,220,180,.50), -5px -5px 30px rgba(0,180,220,.40),
+    0 0 160px rgba(0,200,180,.18), 0 0 200px rgba(212,168,48,.08);
+  animation: trancepulse 7s ease-in-out infinite alternate;
+  animation-delay: -1.1s;
+  opacity: .95;
+}
+.planet-saturn::before {
+  content: ''; position: absolute;
+  width: 40px; height: 24px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255,240,160,.6) 0%, rgba(200,170,80,.3) 50%, transparent 100%);
+  top: 6%; left: 50%; transform: translateX(-50%);
+}
+.planet-saturn .planet-surface {
+  background: repeating-linear-gradient(180deg,
+    rgba(255,220,100,.10) 0px, rgba(255,220,100,.06) 6px,
+    rgba(150,90,10,.12) 6px, rgba(150,90,10,.06) 12px
+  );
+  background-size: 100% 36px;
+  mix-blend-mode: soft-light;
+}
+
+.saturn-ring {
+  position: absolute;
+  width: 220px; height: 44px;
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotateX(72deg);
+  background: radial-gradient(ellipse at center,
+    transparent 28%,
+    rgba(212,168,48,.15) 32%, rgba(232,200,100,.65) 40%,
+    rgba(255,230,140,.85) 47%, rgba(212,168,48,.75) 54%,
+    rgba(180,130,40,.50) 60%, rgba(140,100,30,.30) 68%,
+    rgba(100,70,20,.12) 76%, transparent 85%
+  );
+  box-shadow:
+    0 0 20px rgba(212,168,48,.40), 0 0 40px rgba(212,168,48,.20),
+    0 2px 12px rgba(0,220,180,.25), 0 -2px 12px rgba(0,180,220,.20);
+  animation: ringtilt 9s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── NEPTUNE ─────────────────────────────────────────────────────────────── */
+
+.planet-neptune {
+  background:
+    radial-gradient(ellipse at 30% 25%, rgba(100,180,255,.75) 0%, transparent 45%),
+    repeating-linear-gradient(175deg,
+      #1a2e8c 0px, #1a2e8c 5px, #2244b8 5px, #2244b8 10px,
+      #0e1f6e 10px, #0e1f6e 15px, #2a50cc 15px, #2a50cc 20px
+    ),
+    linear-gradient(120deg, #060a2e, #1a2e8c 50%, #0a0a40);
+  box-shadow:
+    0 0 16px rgba(30,80,220,.90), 0 0 36px rgba(30,80,220,.65),
+    0 0 65px rgba(20,50,200,.40),
+    4px 4px 20px rgba(180,20,255,.50), -4px -4px 20px rgba(0,240,255,.45),
+    0 0 100px rgba(100,20,200,.15), 0 0 130px rgba(0,100,255,.08);
+  animation:
+    floatorb var(--t) ease-in-out infinite alternate,
+    trancepulse 7s ease-in-out infinite alternate;
+  animation-delay: 0s, -4.7s;
+  opacity: .87;
+}
+.planet-neptune::before {
+  content: ''; position: absolute;
+  width: 18px; height: 11px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(8,15,80,.8) 0%, rgba(15,30,120,.4) 60%, transparent 100%);
+  top: 45%; left: 38%; transform: translate(-50%, -50%);
+}
+.planet-neptune .planet-surface {
+  background: repeating-linear-gradient(175deg,
+    rgba(0,100,255,.08) 0px, rgba(0,100,255,.05) 5px,
+    rgba(80,0,180,.10) 5px, rgba(80,0,180,.05) 10px
+  );
+  background-size: 100% 30px;
+  animation: surfacedrift 12s ease-in-out infinite alternate;
+  animation-delay: -4s;
+  mix-blend-mode: soft-light;
+}
+
+/* ─── ACCESSIBILITY + MOBILE ──────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .planet-jupiter, .planet-venus, .planet-saturn,
+  .planet-neptune, .planet-saturn-wrap, .planet-surface,
+  .saturn-ring, .planet-venus::before { animation: none; }
+  .planet-jupiter     { transform: translateY(-14px); }
+  .planet-venus       { transform: translateY(-10px); }
+  .planet-saturn-wrap { transform: translateY(-12px); }
+  .planet-neptune     { transform: translateY(-16px); }
 }
 @media (max-width: 900px) {
-  .hero-waifu { width: 180px; }
+  .planet-saturn-wrap { transform: scale(.65); transform-origin: bottom right; }
+  .planet-jupiter  { width: 70px !important; height: 70px !important; }
+  .planet-venus    { width: 48px !important; height: 48px !important; }
+  .planet-neptune  { width: 40px !important; height: 40px !important; }
 }
+
 .hero-tag {
   font-family: 'Press Start 2P', monospace; font-size: 9px; letter-spacing: 6px; color: var(--cyan);
   text-shadow: 0 0 20px var(--cyan); margin-bottom: 28px; animation: fadeUp .7s ease both;
@@ -329,12 +547,29 @@ footer {
 </nav>
 
 <section class="hero">
-  <div class="orb" style="width:90px;height:90px;background:radial-gradient(circle at 38% 35%,#ff9fd3,#c2185b);top:14%;left:7%;--t:5.5s;box-shadow:0 0 40px rgba(255,110,180,.5);opacity:.85;"></div>
-  <div class="orb" style="width:55px;height:55px;background:radial-gradient(circle at 38% 35%,#d4b4fe,#7c3aed);top:18%;right:10%;--t:7s;box-shadow:0 0 25px rgba(124,58,237,.5);opacity:.8;"></div>
-  <div class="orb" style="width:130px;height:130px;background:radial-gradient(circle at 38% 35%,#ffe566,#ff6b00);bottom:22%;right:5%;--t:6s;box-shadow:0 0 50px rgba(255,229,102,.3);opacity:.55;"></div>
-  <div class="orb" style="width:40px;height:40px;background:radial-gradient(circle at 38% 35%,#67e8f9,#0066ff);bottom:28%;left:8%;--t:8s;box-shadow:0 0 25px rgba(0,240,255,.45);opacity:.8;"></div>
+  <!-- JUPITER — top left -->
+  <div class="orb planet-jupiter" style="width:100px;height:100px;top:14%;left:7%;--t:5.5s;">
+    <div class="planet-surface"></div>
+  </div>
 
-  <img src="waifu.png" alt="Kawaii Arcade Waifu" class="hero-waifu">
+  <!-- VENUS — top right -->
+  <div class="orb planet-venus" style="width:65px;height:65px;top:18%;right:10%;--t:7s;">
+    <div class="planet-surface"></div>
+  </div>
+
+  <!-- SATURN — bottom right (hero planet) -->
+  <div class="planet-saturn-wrap" style="bottom:22%;right:5%;--t:6s;">
+    <div class="planet-saturn">
+      <div class="planet-surface"></div>
+    </div>
+    <div class="saturn-ring"></div>
+  </div>
+
+  <!-- NEPTUNE — bottom left -->
+  <div class="orb planet-neptune" style="width:55px;height:55px;bottom:28%;left:8%;--t:8s;">
+    <div class="planet-surface"></div>
+  </div>
+
   <p class="hero-tag">✦ LOVESPARK GAMES ✦</p>
   <h1 class="hero-title">
     <span class="outline">KAWAII</span>
@@ -378,7 +613,7 @@ footer {
           <div class="gcard-thumb">
             <div class="gcard-thumb-emoji">🌸</div>
             <div class="gbadge gb-arcade">ARCADE</div>
-            <div class="gcard-play"><a href="https://chromewebstore.google.com/detail/abbbdlagiiajgajbjeepecefmoaifabn" class="play-cta">▶ PLAY</a></div>
+            <div class="gcard-play"><a href="#" class="play-cta">▶ PLAY</a></div>
           </div>
           <div class="gcard-body">
             <div class="gcard-title">Flappy Waifu</div>
@@ -399,7 +634,7 @@ footer {
         <div class="gcard-thumb">
           <div class="gcard-thumb-emoji">🍄</div>
           <div class="gbadge gb-chill">CHILL</div>
-          <div class="gcard-play"><a href="https://chromewebstore.google.com/detail/nllakccmbjjonaaedadkpifndagdlgga" class="play-cta">▶ PLAY</a></div>
+          <div class="gcard-play"><a href="#" class="play-cta">▶ PLAY</a></div>
         </div>
         <div class="gcard-body">
           <div class="gcard-title">Dreamy Garden</div>
