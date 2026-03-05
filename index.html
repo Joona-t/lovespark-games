@@ -111,6 +111,20 @@ nav {
   from { transform: translateY(0) rotate(0deg); }
   to { transform: translateY(-28px) rotate(12deg); }
 }
+.hero-waifu {
+  width: 260px; height: auto; border-radius: 16px;
+  border: 2px solid rgba(255,110,180,.35);
+  box-shadow: 0 0 40px rgba(255,20,147,.35), 0 0 80px rgba(192,132,252,.2);
+  animation: fadeUp .7s ease both, floatWaifu 4s ease-in-out infinite alternate;
+  margin-bottom: 32px; position: relative; z-index: 2;
+}
+@keyframes floatWaifu {
+  from { transform: translateY(0); }
+  to { transform: translateY(-12px); }
+}
+@media (max-width: 900px) {
+  .hero-waifu { width: 180px; }
+}
 .hero-tag {
   font-family: 'Press Start 2P', monospace; font-size: 9px; letter-spacing: 6px; color: var(--cyan);
   text-shadow: 0 0 20px var(--cyan); margin-bottom: 28px; animation: fadeUp .7s ease both;
@@ -320,6 +334,7 @@ footer {
   <div class="orb" style="width:130px;height:130px;background:radial-gradient(circle at 38% 35%,#ffe566,#ff6b00);bottom:22%;right:5%;--t:6s;box-shadow:0 0 50px rgba(255,229,102,.3);opacity:.55;"></div>
   <div class="orb" style="width:40px;height:40px;background:radial-gradient(circle at 38% 35%,#67e8f9,#0066ff);bottom:28%;left:8%;--t:8s;box-shadow:0 0 25px rgba(0,240,255,.45);opacity:.8;"></div>
 
+  <img src="waifu.png" alt="Kawaii Arcade Waifu" class="hero-waifu">
   <p class="hero-tag">✦ LOVESPARK GAMES ✦</p>
   <h1 class="hero-title">
     <span class="outline">KAWAII</span>
