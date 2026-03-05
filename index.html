@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LoveSpark GAMES ✦ Kawaii Arcade</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --hot:     #ff1493;
+  --pink:    #ff6eb4;
+  --soft:    #ffb3d9;
+  --purple:  #c084fc;
+  --violet:  #7c3aed;
+  --cyan:    #00f0ff;
+  --yellow:  #ffe566;
+  --bg:      #06000f;
+  --bg2:     #0e0020;
+  --white:   #fff0f8;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'DM Mono', monospace;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+#cur {
+  position: fixed; width: 14px; height: 14px;
+  border: 2px solid var(--hot); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width .15s, height .15s, background .15s;
+  mix-blend-mode: screen;
+}
+#cur2 {
+  position: fixed; width: 4px; height: 4px;
+  background: var(--hot); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,.04) 3px, rgba(0,0,0,.04) 4px);
+  pointer-events: none; z-index: 200;
+}
+
+#stars-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+.vgrid {
+  position: fixed; bottom: 0; left: 50%;
+  width: 300vw; height: 60vh;
+  transform: translateX(-50%) perspective(500px) rotateX(75deg);
+  transform-origin: bottom center;
+  background: linear-gradient(rgba(255,20,147,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,20,147,.07) 1px, transparent 1px);
+  background-size: 80px 80px;
+  animation: vgScroll 3s linear infinite;
+  pointer-events: none; z-index: 1;
+}
+@keyframes vgScroll { to { background-position: 0 80px; } }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 48px;
+  background: linear-gradient(to bottom, rgba(6,0,15,.97) 70%, transparent);
+}
+.nav-logo {
+  font-family: 'Press Start 2P', monospace; font-size: 10px; letter-spacing: 2px;
+  color: var(--pink); text-shadow: 0 0 20px var(--hot), 0 0 40px var(--hot); text-decoration: none;
+}
+.nav-logo em { color: var(--cyan); font-style: normal; }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,240,248,.5); text-decoration: none; transition: color .2s; }
+.nav-links a:hover { color: var(--pink); }
+.nav-pill {
+  font-family: 'Press Start 2P', monospace; font-size: 8px; padding: 10px 20px; letter-spacing: 1px;
+  background: transparent; border: 1px solid var(--pink); color: var(--pink); text-decoration: none;
+  clip-path: polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%); transition: all .2s;
+}
+.nav-pill:hover { background: var(--hot); border-color: var(--hot); color: #fff; box-shadow: 0 0 30px var(--hot); }
+
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 140px 40px 100px; z-index: 2; overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute; width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(192,132,252,.18) 0%, rgba(255,20,147,.08) 45%, transparent 70%);
+  border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  animation: pulse 5s ease-in-out infinite; pointer-events: none;
+}
+@keyframes pulse {
+  0%,100% { transform: translate(-50%,-50%) scale(1); opacity: .7; }
+  50% { transform: translate(-50%,-50%) scale(1.12); opacity: 1; }
+}
+.orb {
+  position: absolute; border-radius: 50%;
+  animation: floatorb var(--t) ease-in-out infinite alternate; pointer-events: none;
+}
+@keyframes floatorb {
+  from { transform: translateY(0) rotate(0deg); }
+  to { transform: translateY(-28px) rotate(12deg); }
+}
+.hero-tag {
+  font-family: 'Press Start 2P', monospace; font-size: 9px; letter-spacing: 6px; color: var(--cyan);
+  text-shadow: 0 0 20px var(--cyan); margin-bottom: 28px; animation: fadeUp .7s ease both;
+}
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(80px, 16vw, 180px); line-height: .88;
+  letter-spacing: 4px; animation: fadeUp .7s .08s ease both;
+}
+.hero-title .outline {
+  display: block; color: transparent; -webkit-text-stroke: 2px var(--pink);
+  filter: drop-shadow(0 0 20px rgba(255,110,180,.5));
+}
+.hero-title .filled {
+  display: block;
+  background: linear-gradient(135deg, var(--hot) 0%, var(--purple) 55%, var(--cyan) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  filter: drop-shadow(0 0 40px rgba(255,20,147,.6));
+}
+.hero-sub {
+  font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(255,240,248,.45); margin: 24px 0 52px; animation: fadeUp .7s .16s ease both;
+}
+.hero-btns { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; animation: fadeUp .7s .24s ease both; }
+.btn-a {
+  font-family: 'Press Start 2P', monospace; font-size: 9px; padding: 18px 36px; letter-spacing: 2px;
+  background: linear-gradient(135deg, var(--hot), var(--violet)); color: #fff; text-decoration: none;
+  clip-path: polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%);
+  box-shadow: 0 0 40px rgba(255,20,147,.55); transition: transform .15s, box-shadow .2s;
+}
+.btn-a:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 0 70px rgba(255,20,147,.8); }
+.btn-b {
+  font-family: 'Press Start 2P', monospace; font-size: 9px; padding: 18px 36px; letter-spacing: 2px;
+  background: transparent; color: var(--cyan); text-decoration: none; border: 1px solid var(--cyan);
+  clip-path: polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%);
+  box-shadow: 0 0 20px rgba(0,240,255,.15), inset 0 0 20px rgba(0,240,255,.05); transition: all .2s;
+}
+.btn-b:hover { background: rgba(0,240,255,.08); box-shadow: 0 0 50px rgba(0,240,255,.5); transform: translateY(-3px); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
+
+.mq-wrap {
+  position: relative; z-index: 3; overflow: hidden; padding: 15px 0;
+  border-top: 1px solid rgba(255,20,147,.18); border-bottom: 1px solid rgba(255,20,147,.18);
+  background: rgba(255,20,147,.03);
+}
+.mq-track { display: flex; white-space: nowrap; animation: mq 22s linear infinite; }
+.mq-track span { font-family: 'Press Start 2P', monospace; font-size: 8px; letter-spacing: 3px; padding: 0 36px; color: var(--pink); opacity: .7; }
+.mq-track span.c { color: var(--cyan); opacity: .9; }
+.mq-track span.y { color: var(--yellow); opacity: .85; }
+@keyframes mq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+.stats {
+  position: relative; z-index: 3;
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border-bottom: 1px solid rgba(255,20,147,.12);
+}
+.stat { padding: 44px 24px; text-align: center; border-right: 1px solid rgba(255,20,147,.1); }
+.stat:last-child { border-right: none; }
+.stat-n {
+  font-family: 'Bebas Neue', sans-serif; font-size: 56px; line-height: 1;
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block;
+}
+.stat-l { font-family: 'Press Start 2P', monospace; font-size: 7px; letter-spacing: 3px; color: rgba(255,240,248,.35); margin-top: 8px; display: block; }
+
+.s-head { text-align: center; margin-bottom: 72px; }
+.s-tag { font-family: 'Press Start 2P', monospace; font-size: 8px; letter-spacing: 5px; color: var(--cyan); text-shadow: 0 0 14px var(--cyan); display: block; margin-bottom: 18px; }
+.s-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px,7vw,80px); letter-spacing: 3px;
+  background: linear-gradient(135deg, var(--white) 0%, var(--soft) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.games-wrap { position: relative; z-index: 3; padding: 110px 48px; max-width: 1280px; margin: 0 auto; }
+.games-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
+.card-feat { grid-column: span 12; }
+.card-half { grid-column: span 6; }
+
+.gcard {
+  position: relative; background: linear-gradient(135deg, rgba(14,0,32,.95), rgba(6,0,15,.98));
+  border: 1px solid rgba(255,110,180,.18); overflow: hidden; transition: transform .25s, box-shadow .25s;
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+}
+.gcard:hover { transform: translateY(-6px); box-shadow: 0 24px 70px rgba(255,20,147,.22), 0 0 0 1px rgba(255,110,180,.35); }
+.gcard::after {
+  content: ''; position: absolute; top: 0; right: 0; width: 22px; height: 22px;
+  background: var(--pink); clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+.card-feat .gcard-inner { display: grid; grid-template-columns: 1fr 1fr; }
+.gcard-thumb {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, rgba(192,132,252,.15), rgba(255,20,147,.1));
+}
+.card-feat .gcard-thumb { min-height: 340px; }
+.card-half .gcard-thumb { height: 220px; }
+.gcard-thumb-emoji {
+  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+  font-size: 72px; background: linear-gradient(135deg, rgba(192,132,252,.2), rgba(255,20,147,.15));
+}
+.gbadge {
+  position: absolute; top: 14px; left: 14px; z-index: 2;
+  font-family: 'Press Start 2P', monospace; font-size: 7px; padding: 5px 10px; letter-spacing: 1px;
+}
+.gb-arcade { background: var(--hot); color: #fff; }
+.gb-chill  { background: var(--cyan); color: var(--bg); }
+.gb-soon   { background: rgba(255,229,102,.15); border: 1px solid var(--yellow); color: var(--yellow); }
+.gcard-play {
+  position: absolute; inset: 0; z-index: 3;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, rgba(255,20,147,.28), rgba(0,240,255,.15));
+  opacity: 0; transition: opacity .25s;
+}
+.gcard:hover .gcard-play { opacity: 1; }
+.play-cta {
+  font-family: 'Press Start 2P', monospace; font-size: 10px; padding: 14px 28px;
+  background: #fff; color: var(--bg); text-decoration: none; letter-spacing: 2px;
+  clip-path: polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);
+  box-shadow: 0 0 40px rgba(255,255,255,.5); transition: transform .15s;
+}
+.play-cta:hover { transform: scale(1.06); }
+.gcard-body { padding: 22px 26px 26px; display: flex; flex-direction: column; justify-content: center; }
+.card-feat .gcard-body { padding: 40px 44px; }
+.gcard-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; color: var(--white); margin-bottom: 8px; }
+.card-feat .gcard-title { font-size: 42px; margin-bottom: 14px; }
+.gcard-desc { font-size: 11px; line-height: 1.75; color: rgba(255,240,248,.48); letter-spacing: .4px; margin-bottom: 20px; }
+.gcard-foot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.gtags { display: flex; gap: 7px; flex-wrap: wrap; }
+.gtag { font-family: 'Press Start 2P', monospace; font-size: 6px; padding: 4px 8px; letter-spacing: 1px; border: 1px solid rgba(255,110,180,.25); color: rgba(255,110,180,.6); }
+.gstatus { font-family: 'Press Start 2P', monospace; font-size: 7px; letter-spacing: 1px; }
+.gs-live { color: #7fff7f; text-shadow: 0 0 10px #7fff7f; }
+.gs-soon { color: var(--yellow); text-shadow: 0 0 10px var(--yellow); }
+
+.ext-wrap {
+  position: relative; z-index: 3;
+  background: linear-gradient(180deg, rgba(124,58,237,.05), transparent);
+  border-top: 1px solid rgba(124,58,237,.2); padding: 110px 48px;
+}
+.ext-inner { max-width: 1280px; margin: 0 auto; }
+.ext-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 18px; }
+.ecard {
+  padding: 28px 24px; border: 1px solid rgba(192,132,252,.18);
+  background: linear-gradient(135deg, rgba(14,0,32,.85), rgba(6,0,15,.9));
+  transition: transform .2s, border-color .2s, box-shadow .2s; position: relative; overflow: hidden;
+}
+.ecard::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(192,132,252,.06), transparent); opacity: 0; transition: opacity .2s; }
+.ecard:hover { transform: translateY(-5px); border-color: rgba(192,132,252,.45); box-shadow: 0 12px 40px rgba(124,58,237,.2); }
+.ecard:hover::before { opacity: 1; }
+.ecard-icon { font-size: 30px; margin-bottom: 14px; display: block; }
+.ecard-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; color: var(--white); margin-bottom: 7px; }
+.ecard-desc { font-size: 10px; color: rgba(255,240,248,.42); line-height: 1.65; letter-spacing: .3px; }
+
+footer {
+  position: relative; z-index: 3; text-align: center; padding: 70px 40px;
+  border-top: 1px solid rgba(255,20,147,.1);
+  background: linear-gradient(to top, rgba(255,20,147,.03), transparent);
+}
+.foot-logo { font-family: 'Press Start 2P', monospace; font-size: 13px; color: var(--pink); text-shadow: 0 0 24px var(--hot); display: block; margin-bottom: 14px; }
+.foot-logo em { color: var(--cyan); font-style: normal; }
+.foot-sub { font-size: 10px; letter-spacing: 2px; color: rgba(255,240,248,.3); margin-bottom: 28px; }
+.foot-links { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; list-style: none; }
+.foot-links a { font-family: 'Press Start 2P', monospace; font-size: 7px; letter-spacing: 2px; color: rgba(255,110,180,.45); text-decoration: none; transition: color .2s; }
+.foot-links a:hover { color: var(--pink); }
+
+.particles { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.particle {
+  position: absolute; font-size: var(--ps); bottom: -30px; left: var(--pl);
+  animation: rise var(--pd) ease-in infinite var(--pdelay); opacity: 0;
+}
+@keyframes rise {
+  0%   { opacity: 0; transform: translateY(0) scale(.5) rotate(0deg); }
+  8%   { opacity: .65; }
+  92%  { opacity: .18; }
+  100% { opacity: 0; transform: translateY(-115vh) scale(1.1) rotate(25deg); }
+}
+
+@media (max-width: 900px) {
+  .card-feat .gcard-inner { grid-template-columns: 1fr; }
+  .card-feat .gcard-thumb { min-height: 220px; }
+  .card-half { grid-column: span 12; }
+  .stats { grid-template-columns: repeat(2,1fr); }
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  .games-wrap, .ext-wrap { padding: 60px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur2"></div>
+<canvas id="stars-canvas"></canvas>
+<div class="vgrid"></div>
+<div class="particles" id="particles"></div>
+
+<nav>
+  <a href="#" class="nav-logo">LS<em>✦</em>GAMES</a>
+  <ul class="nav-links">
+    <li><a href="#games">Arcade</a></li>
+    <li><a href="#extensions">Extensions</a></li>
+    <li><a href="https://lovespark.love">← Main Suite</a></li>
+  </ul>
+  <a href="https://lovespark.love" class="nav-pill">lovespark.love →</a>
+</nav>
+
+<section class="hero">
+  <div class="orb" style="width:90px;height:90px;background:radial-gradient(circle at 38% 35%,#ff9fd3,#c2185b);top:14%;left:7%;--t:5.5s;box-shadow:0 0 40px rgba(255,110,180,.5);opacity:.85;"></div>
+  <div class="orb" style="width:55px;height:55px;background:radial-gradient(circle at 38% 35%,#d4b4fe,#7c3aed);top:18%;right:10%;--t:7s;box-shadow:0 0 25px rgba(124,58,237,.5);opacity:.8;"></div>
+  <div class="orb" style="width:130px;height:130px;background:radial-gradient(circle at 38% 35%,#ffe566,#ff6b00);bottom:22%;right:5%;--t:6s;box-shadow:0 0 50px rgba(255,229,102,.3);opacity:.55;"></div>
+  <div class="orb" style="width:40px;height:40px;background:radial-gradient(circle at 38% 35%,#67e8f9,#0066ff);bottom:28%;left:8%;--t:8s;box-shadow:0 0 25px rgba(0,240,255,.45);opacity:.8;"></div>
+
+  <p class="hero-tag">✦ LOVESPARK GAMES ✦</p>
+  <h1 class="hero-title">
+    <span class="outline">KAWAII</span>
+    <span class="filled">ARCADE✦</span>
+  </h1>
+  <p class="hero-sub">free browser games · chrome extensions · built with love · no ads</p>
+  <div class="hero-btns">
+    <a href="#games" class="btn-a">▶ PLAY FREE</a>
+    <a href="https://lovespark.love" class="btn-b">← BACK TO SUITE</a>
+  </div>
+</section>
+
+<div class="mq-wrap">
+  <div class="mq-track">
+    <span>✦ FLAPPY WAIFU</span><span class="c">✦ FREE FOREVER</span><span class="y">✦ NO ADS EVER</span>
+    <span>✦ OPEN SOURCE</span><span class="c">✦ BUILT WITH LOVE</span><span class="y">✦ KAWAII ARCADE</span>
+    <span>✦ NEURODIVERGENT FRIENDLY</span><span class="c">✦ LOVESPARK SUITE</span><span class="y">✦ Y2K VIBES</span>
+    <span>✦ FLAPPY WAIFU</span><span class="c">✦ FREE FOREVER</span><span class="y">✦ NO ADS EVER</span>
+    <span>✦ OPEN SOURCE</span><span class="c">✦ BUILT WITH LOVE</span><span class="y">✦ KAWAII ARCADE</span>
+    <span>✦ NEURODIVERGENT FRIENDLY</span><span class="c">✦ LOVESPARK SUITE</span><span class="y">✦ Y2K VIBES</span>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><span class="stat-n">2</span><span class="stat-l">Games Live</span></div>
+  <div class="stat"><span class="stat-n">∞</span><span class="stat-l">Free Forever</span></div>
+  <div class="stat"><span class="stat-n">0</span><span class="stat-l">Ads. Ever.</span></div>
+  <div class="stat"><span class="stat-n">💖</span><span class="stat-l">Built w/ Love</span></div>
+</div>
+
+<section class="games-wrap" id="games">
+  <div class="s-head">
+    <span class="s-tag">// SELECT YOUR GAME</span>
+    <h2 class="s-title">The Arcade</h2>
+  </div>
+  <div class="games-grid">
+
+    <div class="card-feat">
+      <div class="gcard">
+        <div class="gcard-inner">
+          <div class="gcard-thumb">
+            <div class="gcard-thumb-emoji">🌸</div>
+            <div class="gbadge gb-arcade">ARCADE</div>
+            <div class="gcard-play"><a href="#" class="play-cta">▶ PLAY</a></div>
+          </div>
+          <div class="gcard-body">
+            <div class="gcard-title">Flappy Waifu</div>
+            <p class="gcard-desc">The kawaii arcade classic. Tap to flap your waifu through neon pipes in this dark vaporwave world. Psychedelic difficulty curve — the further you get, the wilder it becomes. Milestone celebrations, particle bursts, screen shake. How far can you go?</p>
+            <div class="gcard-foot">
+              <div class="gtags">
+                <span class="gtag">ONE TAP</span><span class="gtag">ENDLESS</span><span class="gtag">HIGH SCORE</span><span class="gtag">PARTICLES</span>
+              </div>
+              <span class="gstatus gs-live">● LIVE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-half">
+      <div class="gcard">
+        <div class="gcard-thumb">
+          <div class="gcard-thumb-emoji">🍄</div>
+          <div class="gbadge gb-chill">CHILL</div>
+          <div class="gcard-play"><a href="#" class="play-cta">▶ PLAY</a></div>
+        </div>
+        <div class="gcard-body">
+          <div class="gcard-title">Dreamy Garden</div>
+          <p class="gcard-desc">Psychedelic cozy snake. Guide your fluffy caterpillar through a pastel wonderland collecting glowing mushrooms. Rainbow trails, slow-mo powerups, flower shields.</p>
+          <div class="gcard-foot">
+            <div class="gtags"><span class="gtag">SNAKE</span><span class="gtag">COZY</span><span class="gtag">POWERUPS</span></div>
+            <span class="gstatus gs-live">● LIVE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-half">
+      <div class="gcard">
+        <div class="gcard-thumb">
+          <div class="gcard-thumb-emoji">🐰</div>
+          <div class="gbadge gb-soon">SOON™</div>
+          <div class="gcard-play"><a href="#" class="play-cta">WISHLIST</a></div>
+        </div>
+        <div class="gcard-body">
+          <div class="gcard-title">??? Classified</div>
+          <p class="gcard-desc">Something very cute is being assembled in the LoveSpark lab. Stay close. Follow lovespark.love to be first to know.</p>
+          <div class="gcard-foot">
+            <div class="gtags"><span class="gtag">MYSTERY</span><span class="gtag">KAWAII</span></div>
+            <span class="gstatus gs-soon">◐ COMING SOON</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="ext-wrap" id="extensions">
+  <div class="ext-inner">
+    <div class="s-head">
+      <span class="s-tag">// CHROME EXTENSION GAMES</span>
+      <h2 class="s-title">Play In Your Browser</h2>
+    </div>
+    <div class="ext-grid">
+      <div class="ecard">
+        <span class="ecard-icon">🐦</span>
+        <div class="ecard-name">Flappy Waifu</div>
+        <div class="ecard-desc">The original. Neon pipes, kawaii sprite, particle explosions. Play straight from your Chrome toolbar.</div>
+      </div>
+      <div class="ecard">
+        <span class="ecard-icon">🐛</span>
+        <div class="ecard-name">Dreamy Garden</div>
+        <div class="ecard-desc">Psychedelic snake lives in your new tab. Unlockable caterpillar skins, rainbow trail mode.</div>
+      </div>
+      <div class="ecard" style="border-color:rgba(255,229,102,.18);">
+        <span class="ecard-icon">✨</span>
+        <div class="ecard-name">More Soon</div>
+        <div class="ecard-desc">New extension games dropping as part of the LoveSpark suite. Follow along to be first to know.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="foot-logo">LOVESPARK <em>GAMES</em></span>
+  <p class="foot-sub">Part of the LoveSpark Suite · Free · Open Source · Built with love 💖</p>
+  <ul class="foot-links">
+    <li><a href="https://lovespark.love">Main Suite</a></li>
+    <li><a href="https://github.com/Joona-t">GitHub</a></li>
+    <li><a href="#">Ko-fi</a></li>
+    <li><a href="#">Twitter/X</a></li>
+  </ul>
+</footer>
+
+<script>
+const cur = document.getElementById('cur');
+const cur2 = document.getElementById('cur2');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+  cur2.style.left = e.clientX + 'px'; cur2.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a,.gcard,.ecard').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.style.width='32px'; cur.style.height='32px'; cur.style.background='rgba(255,20,147,.18)'; });
+  el.addEventListener('mouseleave', () => { cur.style.width='14px'; cur.style.height='14px'; cur.style.background='transparent'; });
+});
+
+const canvas = document.getElementById('stars-canvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function initStars() {
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  stars = Array.from({length:200}, () => ({
+    x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+    r: Math.random()*1.6+.3, a: Math.random(),
+    da: (Math.random()*.008+.002)*(Math.random()>.5?1:-1),
+    color: Math.random()>.8?'#ff6eb4':Math.random()>.6?'#c084fc':'#ffffff'
+  }));
+}
+function drawStars() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  stars.forEach(s => {
+    s.a += s.da;
+    if (s.a>1||s.a<0) s.da*=-1;
+    ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle = s.color; ctx.globalAlpha = s.a*.8; ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(drawStars);
+}
+window.addEventListener('resize', initStars);
+initStars(); drawStars();
+
+const pe = document.getElementById('particles');
+['💖','💗','🌸','✦','💫','⭐','🌙','💕'].forEach((e,i) => {
+  const p = document.createElement('div');
+  p.className = 'particle'; p.textContent = e;
+  p.style.cssText = `--pl:${3+Math.random()*94}%;--ps:${9+Math.random()*14}px;--pd:${9+Math.random()*11}s;--pdelay:${Math.random()*9}s;`;
+  pe.appendChild(p);
+});
+</script>
+</body>
+</html>
