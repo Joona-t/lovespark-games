@@ -117,6 +117,10 @@ nav {
 /* Shared planet infrastructure */
 .planet-jupiter, .planet-venus, .planet-neptune {
   position: absolute; border-radius: 50%; overflow: hidden;
+  will-change: transform, filter;
+}
+.planet-saturn {
+  will-change: transform, filter;
 }
 .planet-surface {
   position: absolute; inset: 0; border-radius: 50%;
@@ -132,100 +136,125 @@ nav {
   top: 0; left: 50%; transform: translateX(-50%);
 }
 
-/* ─── KEYFRAMES ───────────────────────────────────────────────────────────── */
+/* ─── KEYFRAMES — PSYCHEDELIC TRANCE ──────────────────────────────────────── */
 
 @keyframes trancepulse {
-  from { transform: scale(1);    filter: hue-rotate(0deg)  brightness(1); }
-  to   { transform: scale(1.04); filter: hue-rotate(30deg) brightness(1.08); }
+  0%   { filter: hue-rotate(0deg)   brightness(1);    }
+  25%  { filter: hue-rotate(90deg)  brightness(1.12); }
+  50%  { filter: hue-rotate(180deg) brightness(1.05); }
+  75%  { filter: hue-rotate(270deg) brightness(1.15); }
+  100% { filter: hue-rotate(360deg) brightness(1);    }
 }
 @keyframes surfacedrift {
   from { background-position: 0px 0px; }
-  to   { background-position: 20px 20px; }
+  to   { background-position: 40px 40px; }
 }
 @keyframes ringtilt {
-  from { transform: translate(-50%, -50%) rotateX(72deg) rotateZ(0deg); }
-  to   { transform: translate(-50%, -50%) rotateX(72deg) rotateZ(3deg); }
+  0%   { transform: translate(-50%, -50%) rotateX(72deg) rotateZ(0deg);  filter: hue-rotate(0deg); }
+  50%  { transform: translate(-50%, -50%) rotateX(72deg) rotateZ(4deg);  filter: hue-rotate(40deg); }
+  100% { transform: translate(-50%, -50%) rotateX(72deg) rotateZ(-2deg); filter: hue-rotate(0deg); }
 }
 @keyframes venusSpin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
+@keyframes plasmaswirl {
+  0%   { background-position: 0% 0%;   }
+  25%  { background-position: 100% 25%; }
+  50%  { background-position: 50% 100%; }
+  75%  { background-position: 0% 75%;   }
+  100% { background-position: 0% 0%;    }
+}
+@keyframes auraglow-warm {
+  0%   { box-shadow: 0 0 30px rgba(255,20,147,.6),  0 0 60px rgba(255,20,147,.3),  0 0 120px rgba(255,20,147,.1); }
+  33%  { box-shadow: 0 0 35px rgba(192,132,252,.6),  0 0 70px rgba(192,132,252,.3),  0 0 130px rgba(192,132,252,.1); }
+  66%  { box-shadow: 0 0 30px rgba(0,240,255,.5),    0 0 60px rgba(0,240,255,.25),   0 0 120px rgba(0,240,255,.08); }
+  100% { box-shadow: 0 0 30px rgba(255,20,147,.6),  0 0 60px rgba(255,20,147,.3),  0 0 120px rgba(255,20,147,.1); }
+}
+@keyframes auraglow-cool {
+  0%   { box-shadow: 0 0 30px rgba(0,100,255,.6),   0 0 60px rgba(0,100,255,.3),   0 0 120px rgba(0,100,255,.1); }
+  33%  { box-shadow: 0 0 35px rgba(180,20,255,.6),   0 0 70px rgba(180,20,255,.3),  0 0 130px rgba(180,20,255,.1); }
+  66%  { box-shadow: 0 0 30px rgba(0,240,255,.5),    0 0 60px rgba(0,240,255,.25),  0 0 120px rgba(0,240,255,.08); }
+  100% { box-shadow: 0 0 30px rgba(0,100,255,.6),   0 0 60px rgba(0,100,255,.3),   0 0 120px rgba(0,100,255,.1); }
+}
+
 
 /* ─── JUPITER ─────────────────────────────────────────────────────────────── */
 
 .planet-jupiter {
   background:
-    radial-gradient(ellipse at 35% 30%, rgba(255,240,200,.55) 0%, transparent 55%),
+    radial-gradient(ellipse at 35% 30%, rgba(255,240,200,.6) 0%, transparent 50%),
     repeating-linear-gradient(180deg,
-      #c8773a 0px, #c8773a 8px, #e8c99a 8px, #e8c99a 16px,
-      #a0522d 16px, #a0522d 22px, #d4956e 22px, #d4956e 30px,
-      #e8dcc8 30px, #e8dcc8 36px, #9b4e2e 36px, #9b4e2e 44px,
-      #c8773a 44px, #c8773a 52px, #b89060 52px, #b89060 60px
+      #d4773a 0px, #ff9944 6px, #e8c99a 6px, #ffcc66 12px,
+      #a0522d 12px, #c8553a 18px, #ff6eb4 18px, rgba(255,110,180,.4) 20px,
+      #d4956e 20px, #e8a060 26px, #e8dcc8 26px, #ffd488 32px,
+      #9b4e2e 32px, #c8773a 38px, #b89060 38px, #cc8844 44px
     ),
-    linear-gradient(100deg, #7a3520, #c8773a 50%, #7c3aed 100%);
-  box-shadow:
-    0 0 20px rgba(200,119,58,.80), 0 0 45px rgba(200,119,58,.55),
-    0 0 80px rgba(200,80,20,.35),
-    4px 4px 25px rgba(255,20,147,.45), -4px -4px 25px rgba(0,200,180,.25),
-    0 0 120px rgba(124,58,237,.15);
+    linear-gradient(100deg, #7a3520, #d4773a 40%, #ff1493 70%, #7c3aed 100%);
   animation:
     floatorb var(--t) ease-in-out infinite alternate,
-    trancepulse 7s ease-in-out infinite alternate;
-  animation-delay: 0s, 0s;
+    trancepulse 14s linear infinite,
+    auraglow-warm 6s ease-in-out infinite;
+  animation-delay: 0s, 0s, -1s;
   opacity: .92;
 }
 .planet-jupiter::before {
   content: ''; position: absolute;
   width: 32px; height: 20px; border-radius: 50%;
-  background: radial-gradient(ellipse at 40% 40%, #ff6b35, #d4380d 40%, #8b1a00 80%, transparent 100%);
+  background: radial-gradient(ellipse at 40% 40%, #ff4400, #ff1493 40%, #8b1a00 80%, transparent 100%);
   top: 58%; left: 52%; transform: translate(-50%, -50%);
-  box-shadow: inset 0 2px 6px rgba(0,0,0,.5), 0 0 8px rgba(255,80,20,.6);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.5), 0 0 12px rgba(255,20,147,.8), 0 0 24px rgba(255,80,20,.4);
   z-index: 2;
 }
 .planet-jupiter .planet-surface {
   background: repeating-linear-gradient(180deg,
-    rgba(255,180,80,.12) 0px, rgba(255,180,80,.08) 8px,
-    rgba(100,30,10,.15) 8px, rgba(100,30,10,.08) 16px
+    rgba(255,180,80,.15) 0px, rgba(255,110,180,.1) 6px,
+    rgba(100,30,10,.18) 6px, rgba(124,58,237,.08) 12px
   );
-  background-size: 100% 60px;
+  background-size: 100% 44px;
   mix-blend-mode: soft-light;
+  animation: surfacedrift 8s ease-in-out infinite alternate;
 }
 
 /* ─── VENUS ───────────────────────────────────────────────────────────────── */
 
 .planet-venus {
   background: radial-gradient(ellipse at 35% 30%,
-    rgba(255,245,200,.9) 0%, rgba(255,200,120,.8) 30%,
-    rgba(220,140,60,.9) 60%, rgba(180,80,40,1) 100%
+    rgba(255,245,200,.95) 0%, rgba(255,180,100,.85) 25%,
+    rgba(255,110,180,.5) 50%, rgba(220,100,40,.95) 75%, rgba(180,50,80,1) 100%
   );
-  box-shadow:
-    0 0 18px rgba(255,180,80,.85), 0 0 40px rgba(255,140,60,.60),
-    0 0 70px rgba(220,100,40,.35),
-    4px 4px 18px rgba(255,105,180,.50), -4px -4px 18px rgba(255,200,100,.40),
-    0 0 90px rgba(255,150,50,.12);
   animation:
     floatorb var(--t) ease-in-out infinite alternate,
-    trancepulse 7s ease-in-out infinite alternate;
-  animation-delay: 0s, -2.3s;
+    trancepulse 16s linear infinite,
+    auraglow-warm 5s ease-in-out infinite;
+  animation-delay: 0s, -2.3s, -3s;
   opacity: .88;
 }
 .planet-venus::before {
   content: ''; position: absolute;
-  width: 140%; height: 140%; top: -20%; left: -20%;
+  width: 150%; height: 150%; top: -25%; left: -25%;
   border-radius: 50%;
-  background: conic-gradient(from 0deg,
-    rgba(255,255,200,0) 0deg, rgba(255,220,150,.25) 60deg,
-    rgba(255,255,200,0) 120deg, rgba(220,160,80,.20) 180deg,
-    rgba(255,255,200,0) 240deg, rgba(255,210,130,.15) 300deg,
-    rgba(255,255,200,0) 360deg
-  );
-  animation: venusSpin 14s linear infinite;
+  background:
+    conic-gradient(from 0deg,
+      rgba(255,255,200,0) 0deg, rgba(255,20,147,.3) 45deg,
+      rgba(255,255,200,0) 90deg, rgba(255,200,100,.25) 135deg,
+      rgba(255,255,200,0) 180deg, rgba(192,132,252,.2) 225deg,
+      rgba(255,255,200,0) 270deg, rgba(255,180,80,.3) 315deg,
+      rgba(255,255,200,0) 360deg
+    ),
+    conic-gradient(from 180deg,
+      transparent 0deg, rgba(0,240,255,.12) 60deg,
+      transparent 120deg, rgba(255,20,147,.1) 180deg,
+      transparent 240deg, rgba(255,229,102,.08) 300deg,
+      transparent 360deg
+    );
+  animation: venusSpin 10s linear infinite;
   mix-blend-mode: screen;
   pointer-events: none;
 }
 .planet-venus .planet-surface {
-  background: radial-gradient(ellipse at 60% 65%, rgba(180,80,20,.3) 0%, transparent 60%);
-  animation: surfacedrift 14s ease-in-out infinite alternate;
+  background: radial-gradient(ellipse at 60% 65%, rgba(255,20,147,.2) 0%, rgba(180,80,20,.15) 40%, transparent 70%);
+  animation: surfacedrift 9s ease-in-out infinite alternate;
   mix-blend-mode: multiply;
 }
 
@@ -233,37 +262,35 @@ nav {
 
 .planet-saturn {
   background:
-    radial-gradient(ellipse at 50% 8%,  rgba(255,245,200,.70) 0%, transparent 45%),
-    radial-gradient(ellipse at 50% 92%, rgba(255,240,190,.50) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 8%,  rgba(255,245,200,.75) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 92%, rgba(255,240,190,.55) 0%, transparent 40%),
     radial-gradient(ellipse at 32% 28%, rgba(255,250,220,.85) 0%, transparent 52%),
     repeating-linear-gradient(180deg,
-      #d4a830 0px, #d4a830 6px, #e8c96a 6px, #e8c96a 12px,
-      #c8922a 12px, #c8922a 18px, #e0b850 18px, #e0b850 24px,
-      #b8802a 24px, #b8802a 30px, #d4a830 30px, #d4a830 36px
+      #d4a830 0px, #ffcc44 5px, #e8c96a 5px, #ffe066 10px,
+      #c8922a 10px, #ff6eb4 11px, rgba(255,110,180,.25) 12px, #e0b850 12px, #ffd455 18px,
+      #b8802a 18px, #d4a830 24px, #c8922a 24px, #e8c96a 30px
     ),
-    linear-gradient(160deg, #8b5e1a, #c8922a 50%, #7a4a10);
-  box-shadow:
-    0 0 25px rgba(212,168,48,.90), 0 0 55px rgba(212,168,48,.65),
-    0 0 100px rgba(200,130,40,.40),
-    5px 5px 30px rgba(0,220,180,.50), -5px -5px 30px rgba(0,180,220,.40),
-    0 0 160px rgba(0,200,180,.18), 0 0 200px rgba(212,168,48,.08);
-  animation: trancepulse 7s ease-in-out infinite alternate;
-  animation-delay: -1.1s;
+    linear-gradient(160deg, #8b5e1a, #d4a830 35%, #ff1493 65%, #7c3aed 100%);
+  animation:
+    trancepulse 16s linear infinite,
+    auraglow-warm 7s ease-in-out infinite;
+  animation-delay: -1.1s, -2s;
   opacity: .95;
 }
 .planet-saturn::before {
   content: ''; position: absolute;
   width: 40px; height: 24px; border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(255,240,160,.6) 0%, rgba(200,170,80,.3) 50%, transparent 100%);
+  background: radial-gradient(ellipse, rgba(255,240,160,.7) 0%, rgba(255,200,80,.4) 50%, transparent 100%);
   top: 6%; left: 50%; transform: translateX(-50%);
 }
 .planet-saturn .planet-surface {
   background: repeating-linear-gradient(180deg,
-    rgba(255,220,100,.10) 0px, rgba(255,220,100,.06) 6px,
-    rgba(150,90,10,.12) 6px, rgba(150,90,10,.06) 12px
+    rgba(255,220,100,.12) 0px, rgba(255,110,180,.06) 5px,
+    rgba(150,90,10,.14) 5px, rgba(124,58,237,.05) 10px
   );
-  background-size: 100% 36px;
+  background-size: 100% 30px;
   mix-blend-mode: soft-light;
+  animation: surfacedrift 8s ease-in-out infinite alternate;
 }
 
 .saturn-ring {
@@ -274,15 +301,17 @@ nav {
   transform: translate(-50%, -50%) rotateX(72deg);
   background: radial-gradient(ellipse at center,
     transparent 28%,
-    rgba(212,168,48,.15) 32%, rgba(232,200,100,.65) 40%,
-    rgba(255,230,140,.85) 47%, rgba(212,168,48,.75) 54%,
-    rgba(180,130,40,.50) 60%, rgba(140,100,30,.30) 68%,
-    rgba(100,70,20,.12) 76%, transparent 85%
+    rgba(255,20,147,.12) 31%, rgba(255,200,100,.6) 36%,
+    rgba(255,230,140,.85) 42%, rgba(0,240,255,.3) 47%,
+    rgba(212,168,48,.75) 52%, rgba(192,132,252,.3) 58%,
+    rgba(180,130,40,.50) 63%, rgba(0,200,255,.15) 70%,
+    rgba(100,70,20,.12) 78%, transparent 88%
   );
   box-shadow:
-    0 0 20px rgba(212,168,48,.40), 0 0 40px rgba(212,168,48,.20),
-    0 2px 12px rgba(0,220,180,.25), 0 -2px 12px rgba(0,180,220,.20);
-  animation: ringtilt 9s ease-in-out infinite alternate;
+    0 0 25px rgba(212,168,48,.5), 0 0 50px rgba(212,168,48,.25),
+    0 2px 16px rgba(0,240,255,.35), 0 -2px 16px rgba(255,20,147,.3),
+    0 0 80px rgba(192,132,252,.12);
+  animation: ringtilt 8s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 1;
 }
@@ -291,36 +320,34 @@ nav {
 
 .planet-neptune {
   background:
-    radial-gradient(ellipse at 30% 25%, rgba(100,180,255,.75) 0%, transparent 45%),
+    radial-gradient(ellipse at 30% 25%, rgba(100,200,255,.8) 0%, transparent 45%),
     repeating-linear-gradient(175deg,
-      #1a2e8c 0px, #1a2e8c 5px, #2244b8 5px, #2244b8 10px,
-      #0e1f6e 10px, #0e1f6e 15px, #2a50cc 15px, #2a50cc 20px
+      #1a2e8c 0px, #2244cc 4px, #0e1f6e 4px, #4400cc 8px,
+      #2a50cc 8px, #00ccff 9px, rgba(0,240,255,.3) 10px,
+      #1a2e8c 10px, #3344aa 14px, #0e1f6e 14px, #2a50cc 18px
     ),
-    linear-gradient(120deg, #060a2e, #1a2e8c 50%, #0a0a40);
-  box-shadow:
-    0 0 16px rgba(30,80,220,.90), 0 0 36px rgba(30,80,220,.65),
-    0 0 65px rgba(20,50,200,.40),
-    4px 4px 20px rgba(180,20,255,.50), -4px -4px 20px rgba(0,240,255,.45),
-    0 0 100px rgba(100,20,200,.15), 0 0 130px rgba(0,100,255,.08);
+    linear-gradient(120deg, #060a2e, #7c3aed 40%, #0a0a40 70%, #00f0ff 100%);
   animation:
     floatorb var(--t) ease-in-out infinite alternate,
-    trancepulse 7s ease-in-out infinite alternate;
-  animation-delay: 0s, -4.7s;
+    trancepulse 12s linear infinite,
+    auraglow-cool 5s ease-in-out infinite;
+  animation-delay: 0s, -4.7s, 0s;
   opacity: .87;
 }
 .planet-neptune::before {
   content: ''; position: absolute;
   width: 18px; height: 11px; border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(8,15,80,.8) 0%, rgba(15,30,120,.4) 60%, transparent 100%);
+  background: radial-gradient(ellipse, rgba(0,240,255,.6) 0%, rgba(124,58,237,.4) 50%, transparent 100%);
   top: 45%; left: 38%; transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px rgba(0,240,255,.6), 0 0 16px rgba(124,58,237,.3);
 }
 .planet-neptune .planet-surface {
   background: repeating-linear-gradient(175deg,
-    rgba(0,100,255,.08) 0px, rgba(0,100,255,.05) 5px,
-    rgba(80,0,180,.10) 5px, rgba(80,0,180,.05) 10px
+    rgba(0,240,255,.1) 0px, rgba(0,100,255,.06) 4px,
+    rgba(124,58,237,.12) 4px, rgba(180,20,255,.06) 8px
   );
-  background-size: 100% 30px;
-  animation: surfacedrift 12s ease-in-out infinite alternate;
+  background-size: 100% 24px;
+  animation: surfacedrift 7s ease-in-out infinite alternate;
   animation-delay: -4s;
   mix-blend-mode: soft-light;
 }
@@ -330,11 +357,14 @@ nav {
 @media (prefers-reduced-motion: reduce) {
   .planet-jupiter, .planet-venus, .planet-saturn,
   .planet-neptune, .planet-saturn-wrap, .planet-surface,
-  .saturn-ring, .planet-venus::before { animation: none; }
-  .planet-jupiter     { transform: translateY(-14px); }
-  .planet-venus       { transform: translateY(-10px); }
+  .saturn-ring, .planet-venus::before,
+  .planet-jupiter::before, .planet-saturn::before,
+  .planet-neptune::before { animation: none !important; }
+  .planet-jupiter     { transform: translateY(-14px); filter: none; }
+  .planet-venus       { transform: translateY(-10px); filter: none; }
   .planet-saturn-wrap { transform: translateY(-12px); }
-  .planet-neptune     { transform: translateY(-16px); }
+  .planet-saturn      { filter: none; }
+  .planet-neptune     { transform: translateY(-16px); filter: none; }
 }
 @media (max-width: 900px) {
   .planet-saturn-wrap { transform: scale(.65); transform-origin: bottom right; }
